@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { UserContext } from "./context/userContext";
-
 import "./App.css";
 import AppNavbar from "./components/AppNavbar";
-// import HomePage from "./pages/HomePage";
+import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
-// import SignupPage from "./pages/SignupPage";
-// import { UserProvider } from "./context/UserContext";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   const {user, setUser} = useContext(UserContext);
@@ -27,9 +25,9 @@ function App() {
         {/* <Router> */}
           <AppNavbar />
           <Routes>
-            {/* <Route path="/" exact element={<HomePage />} /> */}
-            {/* <Route path="/signup" exact element={<SignupPage />} /> */}
-            <Route path="/" exact element={<LoginPage />} />
+            <Route path="/" exact element={<HomePage />} />
+            <Route path="/signup" exact element={<SignupPage />} />
+            <Route path="/login" exact element={<LoginPage />} />
           </Routes>
         {/* </Router> */}
 
