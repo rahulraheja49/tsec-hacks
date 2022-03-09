@@ -1,0 +1,25 @@
+
+
+.comingSoon{
+    /* width:calc(80% -0px); */
+    height: 500px;
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -45%);
+    /* overflow: hidden; */
+    /* border: 1px solid red; */
+}
+
+.comingSoon img{
+    width: auto;
+    height: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    .comingSoon img{
+        height: 80vh;
+        width: 80vw;
+    }
+}

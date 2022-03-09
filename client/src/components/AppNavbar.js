@@ -3,12 +3,12 @@ import { Navbar, Container, Nav } from "react-bootstrap";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import UserContext from "../context/UserContext";
+import {UserContext} from "../context/userContext";
 
 export default function AppNavbar() {
   const { user, setUser } = useContext(UserContext);
 
-  const history = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function AppNavbar() {
     if (query) {
       localStorage.setItem("user", JSON.stringify(query));
       setUser(query);
-      history("/");
+      navigate("/");
       toast.success("Logged in successfully");
     }
   }, []);
@@ -25,7 +25,7 @@ export default function AppNavbar() {
   const signOut = () => {
     setUser(null);
     localStorage.removeItem("user");
-    history("/");
+    navigate("/");
   };
 
   return (

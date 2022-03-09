@@ -1,7 +1,14 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
+export const UserContext = createContext();
 
-const UserContext = createContext({});
+export const UserProvider = (props) => {
+  // const userLoggedIn = localStorage.getItem("user");
+  const [user, setUser] = useState();
 
-export const UserProvider = UserContext.Provider;
 
-export default UserContext;
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {props.children}
+    </UserContext.Provider>
+  );
+};

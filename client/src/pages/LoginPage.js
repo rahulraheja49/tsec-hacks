@@ -1,83 +1,110 @@
-import React, { useContext, useState } from "react";
-import { Form, Button, Col, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
+import { useState, useContext, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
-import UserContext from "../context/UserContext";
+import { Box, Button, TextField, Switch } from "@material-ui/core";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
+import logo from "../assets/images/discuss.jpeg";
+import '../styles/login\.css'
+
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const navigate = useNavigate();
+  const { user, setUser  } = useContext(UserContext);
+  const [loginData, setLoginData] = useState({ email: "", pass: "" });
+  const [togglePass, setTogglePass] = useState(true);
 
-  const history = useNavigate();
+  useEffect(() => {}, [togglePass]);
 
-  const { setUser } = useContext(UserContext);
-
-  const logIn = () => {
-    axios
-      .post("/api/auth/login", {
-        email,
-        password,
-      })
-      .then((res) => {
-        if (res.data.success) {
-          setUser(res.data.data);
-          toast.success("Logged in succesfully");
-          history("/");
-        } else {
-          toast.error(res.data.msg);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  let name, val;
+  const handleInput = (e) => {
+    name = e.target.name;
+    val = e.target.value;
+    setLoginData({ ...loginData, [name]: val });
+    // console.log(loginData);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (loginData.email === "" || loginData.pass === "") {
+      alert("Fields can't be empty!!");
+    } 
+
+    alert("Login Clicked!");
+
+  };
+
+
+
   return (
-    <div>
-      <h1>Login here</h1>
-      <Toaster position="top-right" />
-      <Row style={{ margin: 0 }}>
-        <Col style={{ flex: 0.2 }}></Col>
-        <Col>
-          <Form className="justify-content-center w-75 mt-5">
-            <Form.Group className="mb-4">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </Form.Group>
+    <>
+      <div className="loginBox">
+        <div className="signinBox">
+          <h1>
+            <span>Login</span> Synergy
+          </h1>
+          <form>
+            <div className="rows">
+              <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <PersonOutlineOutlinedIcon
+                  sx={{ color: "rgb(187, 187, 187)", mr: 1, my: 0.5 }}
+                />
+                <TextField
+                  name="email"
+                  label="Email"
+                  variant="standard"
+                  onChange={handleInput}
+                  InputLabelProps={{ className: "textfield__label" }}
+                />
+              </Box>
+            </div>
 
-            <Form.Group className="mb-4">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </Form.Group>
+            <div className="rows">
+              <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <LockOutlinedIcon
+                  sx={{ color: "rgb(187, 187, 187)", mr: 1, my: 0.5 }}
+                />
+                <TextField
+                  name="pass"
+                  label="Password"
+                  variant="standard"
+                  onChange={handleInput}
+                  type={togglePass ? "password" : "text"}
+                  InputLabelProps={{ className: "textfield__label" }}
+                />
+              </Box>
+            </div>
 
-            <Form.Group>
-              <Button variant="primary" onClick={logIn}>
-                Log In
-              </Button>
-            </Form.Group>
-            <Form.Group>
-              <Button
-                variant="danger"
-                href="http://localhost:5000/api/auth/google"
-              >
-                Sign In with Google
-              </Button>
-            </Form.Group>
-          </Form>
-        </Col>
-      </Row>
-    </div>
+            <div className="rows rows_last">
+              <div className="rows_switch">
+                <Switch
+                  color="primary"
+                  onChange={() => setTogglePass(!togglePass)}
+                />
+              </div>
+
+              <div className="rows_btn">
+                <Button
+                  type="submit"
+                  className="submit_btn"
+                  variant="contained"
+                  onClick={handleSubmit}
+                >
+                  LOGIN
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div className="Banner">
+          <img src={logo} alt="logo" />
+        </div>
+      </div>
+    </>
   );
+
 }
