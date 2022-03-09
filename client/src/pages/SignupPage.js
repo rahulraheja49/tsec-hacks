@@ -1,124 +1,126 @@
-import React, { useContext, useState } from "react";
-import { Form, Button, Col, Row } from "react-bootstrap";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
-import UserContext from "../context/UserContext";
+import { Box, Button, TextField, Switch } from "@material-ui/core";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-export default function SignupPage() {
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPass, setConfirmPass] = useState("");
-  const [agreed, setAgreed] = useState(false);
+import logo from "../assets/images/discuss.jpeg";
+import '../styles/login\.css'
 
-  const history = useNavigate();
 
-  const { setUser } = useContext(UserContext);
+export default function SignUpPage() {
+  // const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+  const [loginData, setLoginData] = useState({ email: "", pass: "" ,  cpass: "" });
+  const [togglePass, setTogglePass] = useState(true);
 
-  const signUp = () => {
-    if (agreed) {
-      if (password === confirmPass) {
-        axios
-          .post("/api/auth/signup", {
-            email,
-            fullName,
-            password,
-          })
-          .then((res) => {
-            console.log(res);
-            if (res.data.success) {
-              setUser(res.data.data);
-              toast.success("User succesfully created");
-              history("/");
-            } else {
-              toast.error(res.data.msg);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        toast.error("Passwords must match");
-      }
-    } else {
-      toast.error("Please agree to terms and conditions first");
-    }
+  useEffect(() => {}, [togglePass]);
+
+  let name, val;
+  const handleInput = (e) => {
+    name = e.target.name;
+    val = e.target.value;
+    setLoginData({ ...loginData, [name]: val });
+    // console.log(loginData);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (loginData.email === "" || loginData.pass === "") {
+      alert("Fields can't be empty!!");
+    } 
+
+    alert("Login Clicked!");
+
+  };
+
+
+
   return (
-    <div>
-      <h1>Sign Up here</h1>
-      <Toaster position="top-right" />
-      <Row style={{ marginRight: 0 }}>
-        <Col style={{ flex: 0.2 }}></Col>
-        <Col>
-          <Form className="justify-content-center w-75 mt-5">
-            <Form.Group className="mb-4">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
+    <>
+      <div className="loginBox">
+        <div className="signinBox">
+          <h1>
+            <span>Sign Up</span> Synergy
+          </h1>
+          <form>
+            <div className="rows">
+              <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <PersonOutlineOutlinedIcon
+                  sx={{ color: "rgb(187, 187, 187)", mr: 1, my: 0.5 }}
+                />
+                <TextField
+                  name="email"
+                  label="Email"
+                  variant="standard"
+                  onChange={handleInput}
+                  InputLabelProps={{ className: "textfield__label" }}
+                />
+              </Box>
+            </div>
 
-            <Form.Group className="mb-4">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Full Name"
-                value={fullName}
-                onChange={(event) => setFullName(event.target.value)}
-              />
-            </Form.Group>
+            <div className="rows">
+              <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <LockOutlinedIcon
+                  sx={{ color: "rgb(187, 187, 187)", mr: 1, my: 0.5 }}
+                />
+                <TextField
+                  name="pass"
+                  label="Password"
+                  variant="standard"
+                  onChange={handleInput}
+                  type={togglePass ? "password" : "text"}
+                  InputLabelProps={{ className: "textfield__label" }}
+                />
+              </Box>
+            </div>
 
-            <Form.Group className="mb-4">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </Form.Group>
+             <div className="rows">
+              <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <LockOutlinedIcon
+                  sx={{ color: "rgb(187, 187, 187)", mr: 1, my: 0.5 }}
+                />
+                <TextField
+                  name="cpass"
+                  label="Confirm Password"
+                  variant="standard"
+                  onChange={handleInput}
+                  type={togglePass ? "password" : "text"}
+                  InputLabelProps={{ className: "textfield__label" }}
+                />
+              </Box>
+            </div>
 
-            <Form.Group className="mb-4">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Confirm Password"
-                value={confirmPass}
-                onChange={(event) => setConfirmPass(event.target.value)}
-              />
-            </Form.Group>
+            <div className="rows rows_last">
+              <div className="rows_switch">
+                <Switch
+                  color="primary"
+                  onChange={() => setTogglePass(!togglePass)}
+                />
+              </div>
 
-            <Form.Group
-              className="mb-3 justify-content-center"
-              controlId="formBasicCheckbox"
-            >
-              <Row style={{ justifyContent: "center" }}>
-                <Col style={{ flex: 0 }}>
-                  <Form.Check
-                    type="checkbox"
-                    value={agreed}
-                    onClick={(event) => setAgreed(!agreed)}
-                  />
-                </Col>
-                <Col style={{ flex: 0.4 }}>Agree to Terms and Conditions</Col>
-              </Row>
-            </Form.Group>
-            <Button variant="primary" onClick={signUp}>
-              Sign Up
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </div>
+              <div className="rows_btn">
+                <Button
+                  type="submit"
+                  className="submit_btn"
+                  variant="contained"
+                  onClick={handleSubmit}
+                >
+                  SIGN UP
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div className="Banner">
+          <img src={logo} alt="logo" />
+        </div>
+      </div>
+    </>
   );
+
 }
