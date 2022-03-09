@@ -17,6 +17,37 @@ const userSchema = new Schema({
     required: true,
     default: "email",
   },
+  bio: {
+    type: String,
+  },
+  pic: {
+    type: String,
+  },
+  resume: {
+    type: String,
+  },
+  skills: [
+    {
+      skill: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "skill",
+      },
+    },
+  ],
+  social: {
+    github: {
+      type: String,
+    },
+    instagram: {
+      type: String,
+    },
+    linkedin: {
+      type: String,
+    },
+    twitter: {
+      type: String,
+    },
+  },
 });
 
 const User = mongoose.model("user", userSchema);

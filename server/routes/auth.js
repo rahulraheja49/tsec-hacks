@@ -13,5 +13,6 @@ router.get(
   })
 );
 router.get("/google/redirect", passport.authenticate("google"), googleredirect);
+// router.get("/github", passport.authenticate(""))
 
 module.exports = router;
